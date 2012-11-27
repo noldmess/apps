@@ -25,7 +25,10 @@
 // OCP\Share::registerBackend('photo', new OC_Share_Backend_Photo());
 
 //$l = OC_L10N::get('gallery');
+//OC::$CLASSPATH['OC_Share_Backend_Photo'] = 'gallery/lib/share.php';
+OC::$CLASSPATH['OC_Module_Maneger'] = 'facefinder/lib/modulemaneger.php';
 
+new OC_Module_Maneger();
 OCP\App::addNavigationEntry( array(
  'id' => 'facefinder',
  'order' => 20,
