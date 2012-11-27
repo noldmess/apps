@@ -1,15 +1,17 @@
 <?php
-
 class OC_Module_Maneger {
 	function __construct() {
 		$l = OC_L10N::get('facefinder');
-		$xmlfile='lib/module/modulexml.xml';
-		if (file_exists($xmlfile)) {
-			$xml = simplexml_load_file($xmlfile);
-		
-			//print_r($xml);
-		} else {
-			OCP\Util::writeLog("facefinder",$l->t(array('No Module XML file found')),OCP\Util::FATAL); 
+		$dir="owncloud";
+		//OCP\Util::writeLog("facefinder",$_SERVER['SCRIPT_NAME'],OCP\Util::FATAL);
+		$file=OCP\Util::linkTo('facefinder', 'module/modulxml.xml');
+		//OC_Files::newFile($file,'sfsd','dir');
+			if (is_file($file)) {
+		    
+		    	OCP\Util::writeLog("facefinder",$file." yes ".$_SERVER['SCRIPT_NAME'],OCP\Util::FATAL);
+		    	
+		}else{
+			OCP\Util::writeLog("facefinder",$file."   no".$_SERVER['SCRIPT_NAME'],OCP\Util::FATAL);
 		}
 	}
 }
