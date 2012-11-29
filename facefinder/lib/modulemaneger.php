@@ -33,8 +33,9 @@ class OC_Module_Maneger {
 	function __construct() {
 		
 		$dir=$this->getCorelktFolderName().'apps/facefinder/module/';
-		if(OC_Filestorage_Local::is_dir($dir)){
-			$dh=OC_Filestorage_Local::opendir($dir);
+		//$test =new OC_Filestorage_Local('');
+		if(is_dir($dir)){
+			$dh=opendir($dir);
 			while (($file = readdir($dh)) !== false) {
 				if( strpos($file,'.php')){
 					$this->ModuleClass[]=$dir . $file;
@@ -49,7 +50,7 @@ class OC_Module_Maneger {
 			foreach ($this->ModuleClass as $value) {
 				$s.=" ".$value;
 			}
-			OCP\Util::writeLog("facefinder",count($this->ModuleClass )." ". $_SERVER['SCRIPT_NAME']." " .$s,OCP\Util::DEBUG);
+			//OCP\Util::writeLog("facefinder",count($this->ModuleClass )." ". $_SERVER['SCRIPT_NAME']." " .$s,OCP\Util::DEBUG);
 			// until hear
 		}else{
 			/**
@@ -60,10 +61,17 @@ class OC_Module_Maneger {
 	}
 	
 	private function checkKorektensModuleClass($classPaht){
-		//include_once $classPaht;
+		include_once $classPaht;
 		$removeType=strpos($classPaht,'.php');
 		$classname=substr($classPaht,0,$removeType);
-		OCP\Util::writeLog("fafffffffcefinder",$classname,OCP\Util::DEBUG);
+		$last=strrpos($classname,"/");
+		$classname=substr($classname, ($last+1),strlen($classname));
+		if(!class_exists($classname)){
+			/**
+			 * @todo use translation funktion
+			 */
+			OCP\Util::writeLog("facefinder","Class not exist or not identik like file name:".$classname,OCP\Util::ERROR);
+		}
 	}
 	/**
 	 *@todo fine korekr folder name 

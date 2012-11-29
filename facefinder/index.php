@@ -27,7 +27,6 @@ OCP\User::checkLoggedIn();
 OCP\App::checkAppEnabled('facefinder');
 OCP\App::setActiveNavigationEntry( 'facefinder' );
 
-
 OCP\Util::addStyle('facefinder', 'styles');
 OCP\Util::addScript('facefinder', 'new_1');
 if (!OCP\App::isEnabled('files_imageviewer')) {
