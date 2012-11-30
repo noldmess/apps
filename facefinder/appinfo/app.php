@@ -32,7 +32,7 @@ OC::$CLASSPATH['OC_Gallery_Hooks_Handlers'] = 'facefinder/lib/hooks_handlers.php
 OC::$CLASSPATH['OC_FaceFinder_Photo'] = 'facefinder/lib/photo.php';
 OC::$CLASSPATH['OC_FaceFinder_Hooks_Handlers'] = 'facefinder/lib/hooks_handlers.php';
 
-new OC_Module_Maneger();
+//new OC_Module_Maneger();
 OCP\App::addNavigationEntry( array(
  'id' => 'facefinder',
  'order' => 20,

@@ -38,7 +38,7 @@ class OC_Module_Maneger {
 			$dh=opendir($dir);
 			while (($file = readdir($dh)) !== false) {
 				if( strpos($file,'.php')){
-					$this->ModuleClass[]=$dir . $file;
+					//$this->ModuleClass[]=$dir . $file;
 					$this->checkKorektensModuleClass($dir . $file);
 				}
 			}
@@ -46,12 +46,10 @@ class OC_Module_Maneger {
 			 * @todo Remove belou only to test
 			 *
 			 */
-			$s='Classes';
+		/*	$s='Classes';
 			foreach ($this->ModuleClass as $value) {
-				$s.=" ".$value;
-			}
-			//OCP\Util::writeLog("facefinder",count($this->ModuleClass )." ". $_SERVER['SCRIPT_NAME']." " .$s,OCP\Util::DEBUG);
-			// until hear
+				$s.=" ".$value;*/
+			//}
 		}else{
 			/**
 			 * @todo use translation funktion
@@ -59,42 +57,59 @@ class OC_Module_Maneger {
 		OCP\Util::writeLog("facefinder","No Module folder found ",OCP\Util::ERROR);
 	}
 	}
-	
-	private function checkKorektensModuleClass($classPaht){
-		include_once $classPaht;
-		$removeType=strpos($classPaht,'.php');
-		$classname=substr($classPaht,0,$removeType);
+	/**
+	 * The funktion Cheks if the Class implements the 'OC_Module_Interface' interface
+	 *  and the classname is identikal to the filaname
+	 * @param the Path to the class to check $classPath
+	 */
+	private function checkKorektensModuleClass($classPath){
+		include_once $classPath;
+		//nedet to get the classname out of the path
+		$removeType=strpos($classPath,'.php');
+		$classname=substr($classPath,0,$removeType);
 		$last=strrpos($classname,"/");
 		$classname=substr($classname, ($last+1),strlen($classname));
+		//nedet to get the classname out of the path
 		if(!class_exists($classname)){
 			/**
 			 * @todo use translation funktion
 			 */
 			OCP\Util::writeLog("facefinder","Class not exist or not identik like file name:".$classname,OCP\Util::ERROR);
 		}
+		else{
+			$interfaceArray=class_implements($classname);
+			if(count($interfaceArray)>=1 && $interfaceArray['OC_Module_Interface']=='OC_Module_Interface'){
+				/**
+				 * @todo
+				 */
+				
+				$this->ModuleClass[]=$classname;
+				$classname::initialiseDB();
+			}
+				
+		}
+		
 	}
 	/**
 	 *@todo fine korekr folder name 
 	 */
 	private function getCorelktFolderName(){
 		$string=$_SERVER['SCRIPT_NAME'];
-		//OCP\Util::writeLog("facefinder-1",$string." ".$_SERVER['SCRIPT_NAME'],OCP\Util::DEBUG);
 		$help=strrpos($string,"/");
 		$string=substr($string, 0, $help);
-		//OCP\Util::writeLog("facefinder0",$string." ".$_SERVER['SCRIPT_NAME'],OCP\Util::DEBUG);
 		$tok = strtok($string, "/");
-		//OCP\Util::writeLog("facefinder1",$tok." ".$_SERVER['SCRIPT_NAME'],OCP\Util::DEBUG);
 		$tok = strtok("/");
-		//OCP\Util::writeLog("facefinder2",$tok." ".$_SERVER['SCRIPT_NAME'],OCP\Util::DEBUG);
-		$paht_tmp="";
+		$Path_tmp="";
 		$i=2;
 		while ($tok !== false) {
 			$i++;
 			$tok = strtok("/");
-			$paht_tmp.="../";
-			//OCP\Util::writeLog("facefinder".$i,$tok." ".$_SERVER['SCRIPT_NAME'],OCP\Util::DEBUG);
+			$Path_tmp.="../";
 		}
-		//OCP\Util::writeLog("facefinderAusgabe",$paht_tmp,OCP\Util::DEBUG);
-		return $paht_tmp;
+		return $Path_tmp;
 	} 
+	
+	public function getModuleClass(){
+		return $this->ModuleClass;
+	}
 }

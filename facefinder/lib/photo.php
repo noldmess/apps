@@ -66,4 +66,18 @@ class OC_FaceFinder_Photo implements OC_Module_Interface{
 		 * @todo
 		 */
 	}
+	
+	
+	public function  setForingKey($key){
+		/**
+		 * @todo
+		 */
+	}
+	
+	public static function initialiseDB(){
+		/**
+		 * @todo
+		 */
+	}
+	
 }
