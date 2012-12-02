@@ -1,5 +1,8 @@
 
 <div id="controls">
+<div id="slideshow">
+		<input type="button" class="start" value="<?php echo $l->t('Slideshow')?>" />
+	</div>
 </div>
 
 <div id="new_1">

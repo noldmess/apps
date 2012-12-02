@@ -5,7 +5,7 @@
 *
 * @author Aaron Messner
 * @copyright 2012 Aaron Messner aaron.messner@stuudent.uibk.ac.at
-*
+*a
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
 * License as published by the Free Software Foundation; either
@@ -23,7 +23,7 @@
 
 
 // OCP\Share::registerBackend('photo', new OC_Share_Backend_Photo());
-
+//
 //$l = OC_L10N::get('gallery');
 //OC::$CLASSPATH['OC_Share_Backend_Photo'] = 'gallery/lib/share.php';
 OC::$CLASSPATH['OC_Module_Maneger'] = 'facefinder/lib/modulemaneger.php';

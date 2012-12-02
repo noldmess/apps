@@ -1,5 +1,4 @@
 <?php
-
 class EXIF_Module implements OC_Module_Interface{
 	
 		private  $paht;
@@ -8,17 +7,15 @@ class EXIF_Module implements OC_Module_Interface{
 		private $exif;
 		public  function __construct($path) {
 			$this->paht=$path;
-			// 
-			
-			
-			//EXIF.DateTimeOriginal
-			//OCP\Util::writeLog("facefinder",$arr = DatabaseManager::getInstance()->getFileData($this->paht),OCP\Util::DEBUG);
 		}
 		
 		public static function getVersion(){
 			return self::$version;
 		}
-	
+		/**
+		 * Insert the exif data in the EXIF module Table in the db 
+		 * If there is no "DateTimeOriginal" the "FileDateTime" will be  insert 
+		 */
 		public function insert(){
 			/**
 			 * @todo change name of data element
@@ -26,9 +23,11 @@ class EXIF_Module implements OC_Module_Interface{
 			if (\OC_Filesystem::file_exists($this->paht)) {
 				if($this->ForingKey!=null){
 					OCP\Util::writeLog("facefinder","key>".$this->ForingKey,OCP\Util::ERROR);
-					$stmt = OCP\DB::prepare('INSERT INTO `*PREFIX*facefinder_exif_module` (`dasdfsdfsf`, `photo_id`) VALUES ( ?, ?)');
+					$stmt = OCP\DB::prepare('INSERT INTO `*PREFIX*facefinder_exif_module` (`date`, `photo_id`) VALUES ( ?, ?)');
 					$exif=exif_read_data(OC_Filesystem::getLocalFile($this->paht),'FILE', true);
 					$exifheader=$exif['EXIF']['DateTimeOriginal'];
+					if($exifheader==null)
+						$exifheader=date('Y:m:d H:i:s',$exif['FILE']['FileDateTime']);
 					$stmt->execute(array($exifheader,$this->ForingKey));
 				}else{
 					OCP\Util::writeLog("facefinder","No id set",OCP\Util::ERROR);
@@ -58,14 +57,13 @@ class EXIF_Module implements OC_Module_Interface{
 			/**
 			 * @todo
 			 */
-			}
+			
 		}
 	
 		public function search($query){
 			/**
 			 * @todo
 			 */
-			//SELECT YEAR(dasdfsdfsf),MONTH(dasdfsdfsf),DAY(dasdfsdfsf),HOUR(dasdfsdfsf),SECOND(dasdfsdfsf),MINUTE(dasdfsdfsf),path FROM `oc_facefinder_exif_module` inner  join oc_facefinder on (oc_facefinder_exif_module.photo_id= oc_facefinder.photo_id) Where uid_owner LIKE 'Aaron' order by dasdfsdfsf 
 		}
 	
 	
@@ -75,11 +73,17 @@ class EXIF_Module implements OC_Module_Interface{
 			 */
 		}
 	
-	
+		/**
+		 * Uset to set the ForingKey for the module tables
+		 * @param ForingKey
+		 */
 		public function  setForingKey($key){
 			$this->ForingKey=$key;
 		}
-
+		/**
+		 * Help Funktioen to create  module DB Tables
+		 * @param String of $classname
+		 */
 		private static function createDBtabels($classname){
 			$stmt = OCP\DB::prepare('DROP TABLE IF EXISTS`*PREFIX*facefinder_exif_module`');
 			$stmt->execute();
@@ -88,6 +92,9 @@ class EXIF_Module implements OC_Module_Interface{
 			$stmt->execute();
 		}
 		
+		/**
+		 * Create the DB of the Module the if the module hase an new Version numper
+		 */
 		public static  function  initialiseDB(){
 			$classname="EXIF_Module";
 			if(OC_Appconfig::hasKey('facefinder',$classname)){

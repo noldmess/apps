@@ -1,8 +1,9 @@
 <?php
-
+require_once('moduleinterface.php');
 class OC_FaceFinder_Photo implements OC_Module_Interface{
 	
 	private  $paht;
+	private  static $version='0.0.1';
 
 	/**
 	 * 
@@ -49,7 +50,7 @@ class OC_FaceFinder_Photo implements OC_Module_Interface{
 	public function  update($newpaht){
 		$id=$this->getID();
 		if($id!=-1){
-			$stmt = OCP\DB::prepare('UPDATE `ocsdf`.`oc_facefinder` SET `path` = ? WHERE `uid_owner` LIKE ? AND `photo_id` = ? ');
+			$stmt = OCP\DB::prepare('UPDATE `*PREFIX*facefinder` SET `path` = ? WHERE `uid_owner` LIKE ? AND `photo_id` = ? ');
 			$stmt->execute(array($newpaht,\OCP\USER::getUser(),$id));
 		}
 	}

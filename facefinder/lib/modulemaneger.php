@@ -93,7 +93,7 @@ class OC_Module_Maneger {
 	/**
 	 *@todo fine korekr folder name 
 	 */
-	private function getCorelktFolderName(){
+	public  function getCorelktFolderName(){
 		$string=$_SERVER['SCRIPT_NAME'];
 		$help=strrpos($string,"/");
 		$string=substr($string, 0, $help);
