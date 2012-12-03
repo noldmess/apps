@@ -52,6 +52,7 @@ class OC_FaceFinder_Photo implements OC_Module_Interface{
 		if($id!=-1){
 			$stmt = OCP\DB::prepare('UPDATE `*PREFIX*facefinder` SET `path` = ? WHERE `uid_owner` LIKE ? AND `photo_id` = ? ');
 			$stmt->execute(array($newpaht,\OCP\USER::getUser(),$id));
+			$this->paht=$newpaht;
 		}
 	}
 	

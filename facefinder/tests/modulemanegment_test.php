@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__FILE__) . '/../../../../simpletest/autorun.php');
-require_once('apps/facefinder/lib/modulemaneger.php');
-require_once('apps/facefinder/lib/moduleinterface.php');
+//require_once(dirname(__FILE__) . '/../../../../simpletest/autorun.php');
+//require_once('apps/facefinder/lib/modulemaneger.php');
+//require_once('apps/facefinder/lib/moduleinterface.php');
 
 class TestOfModuleManeger extends UnitTestCase {
 

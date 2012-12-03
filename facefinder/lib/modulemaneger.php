@@ -28,26 +28,25 @@ class OC_Module_Maneger {
 	/**
 	 * The Constructor Initialize all in the Module folder store Module Classes
 	 * and check the functionality and correctness
-	 * @todo finde esyer losution
+	 * @todo find easier solution
 	 */
 		/**
 		 * @todo make initialise
 		 */
 	function __construct() {
+		
 		/*$this->ModuleClass=$this->checkCorrectModuleClass("apps/facefinder/module/");
 		foreach ($this->ModuleClass as $modul){
 			$modul::initialiseDB();
 		}*/
 		$dir=$this->getCorrectFolderName().'apps/facefinder/module/';
-		 
-		//$test =new OC_Filestorage_Local('');
 		if(is_dir($dir)){
 			$dh=opendir($dir);
 			while (($file = readdir($dh)) !== false) {
 				if( strpos($file,'.php')){
-					//$this->ModuleClass[]=$dir . $file;
 					$classname=$this->checkCorrectModuleClass($dir . $file);
 					if($classname!=null){
+						
 						$this->ModuleClass[]=$classname;
 						$classname::initialiseDB();
 					}
@@ -61,13 +60,13 @@ class OC_Module_Maneger {
 		}
 	}
 	/**
-	 * The funktion Cheks if the Class implements the 'OC_Module_Interface' interface
-	 *  and the classname is identikal to the filaname
+	 * The funktion trialled if the Class implements the 'OC_Module_Interface' interface
+	 * and the classname is identikal to the filaname
 	 * @param the Path to the class to check $classPath
 	 */
 	public  function checkCorrectModuleClass($classPath){
 		$classname=$this->getClassName($classPath);
-		require_once   $classPath;
+			include_once $classPath;
 		if(!class_exists($classname)){
 			/**
 			 * @todo use translation funktion
@@ -104,7 +103,11 @@ class OC_Module_Maneger {
 		}
 		return $Path_tmp;
 	} 
-	
+	/**
+	 * The funktien need the path to the module folder
+	 * @param Path $modulpath
+	 * @return array of filenams or null in case the forder not exist <NULL, multitype:filename >
+	 */
 	public function getModulsOfFolder($modulpath){
 		$modulaArray=array();
 		$dir=$this->getCorrectFolderName().$modulpath;
