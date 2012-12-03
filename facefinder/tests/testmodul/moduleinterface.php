@@ -20,7 +20,10 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+
 interface OC_Module_Interface {
+	//private static var $version;
 	/**
 	 * for the construction of the class you need the path
 	 * @param unknown_type $paht
