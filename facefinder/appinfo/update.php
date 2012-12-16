@@ -11,3 +11,4 @@ if (version_compare($currentVersion, '0.0.1', '>')) {
 	 * 
 	 */
 }
+

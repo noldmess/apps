@@ -26,23 +26,24 @@
 OCP\User::checkLoggedIn();
 OCP\App::checkAppEnabled('facefinder');
 OCP\App::setActiveNavigationEntry( 'facefinder' );
-
-
 OCP\Util::addStyle('facefinder', 'styles');
 OCP\Util::addScript('facefinder', 'new_1');
-if (!OCP\App::isEnabled('files_imageviewer')) {
+//OCP\Util::addStyle( 'gallery', 'supersized' );
+OCP\Util::addScript('facefinder', 'photoview');
+OCP\Util::addStyle('facefinder', 'photoview');
+/*if (!OCP\App::isEnabled('files_imageviewer')) {
 	OCP\Template::printUserPage('facefinder', 'no-image-app');
 	exit;
-}
+}*/
 
 $root = !empty($_GET['root']) ? $_GET['root'] : '/';
 $files = \OC_Files::getDirectoryContent($root, 'image');
 
-$tl = new \OC\Pictures\TilesLine();
-$ts = new \OC\Pictures\TileStack(array(), '');
+/*$tl = new \OC\Pictures\TilesLine();
+$ts = new \OC\Pictures\TileStack(array(), '');*/
 
 
 $tmpl = new OCP\Template( 'facefinder', 'index', 'user' );
-$tmpl->assign('root', $root, false);
-$tmpl->assign('tl', $tl, false);
+//$tmpl->assign('root', $root, false);
+//$tmpl->assign('tl', $tl, false);
 $tmpl->printPage();

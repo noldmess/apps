@@ -19,46 +19,35 @@ div.visible { opacity: 0.8;}
 
 #new_1 { position:relative; margin: 5px;  border: 0;  margin-top: 3em; }
 
-#new_1 div.head_line h1{
-  float: left;
-  font:100 25px "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: bold;
-}
 
-#new_1  div.year{
+div.year{
+	display: block;
 	width: auto;
 	 height: auto;
 	margin-left:10px;
 }
 
 
-#new_1 div.year div.month {
-	  width: auto;
-  
-	position:relative;
+div.month {
+	clear: left;
+	width: auto;
 	display: block;
 	margin-left: 10px;
 	border-left-width:10px;
-  border-left-style:solid;
-  border-left-color:rgb(29,45,93);
-}
-div.head_line h1{
-  float: left;
-  font:100 25px "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: bold;
-  
+	border-left-style:solid;
+	border-left-color:rgb(29,45,93);
 }
 
-#new_1 div.year div.month div.day img {
-	
- margin: 5px;
- box-shadow:2px 2px 2px #666;
- -moz-box-shadow: 2px 2px 2px #666;
- -webkit-box-shadow: 2px 2px 2px #666;
+
+div.day img {
+	margin: 5px;
+	box-shadow:2px 2px 2px #666;
+	-moz-box-shadow: 2px 2px 2px #666;
+	-webkit-box-shadow: 2px 2px 2px #666;
 }
 
-#new_1 div.year div.month div.day {
-	right:10px;
+div.day {
+	clear: left;
 	display: block;
 	margin-left:5px;
 	width: auto;
@@ -66,41 +55,51 @@ div.head_line h1{
 	border-left-style:solid;
 	border-left-color:rgb(29, 45, 68);
 }
-#new_1 div.year div.month div.day h1 {
-	text-indent:1em;
-
-  font:100 25px "Helvetica Neue", Helvetica, Arial, sans-serif;
-  height: 30px;
-  
+div.day h1 {
+	float:inherit;
+	font:100 25px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	height: 30px;
 }
 
- div.ico_inline {  
-   float: left;
+ div.ico_inline { 
+  float: left;
     width: 30px;
     height: 30px;
     background-image: url("/owncloud/apps/files_imageviewer/img/fancybox.png");
    background-position: -40px -60px;
 }
 
-div.ico_down {  
-   float: left;
-    width: 30px;
+div.ico_down {
+	 float: left;
+	width: 30px;
     height: 30px;
     background-image: url("/owncloud/apps/facefinder/img/fancybox.png");
-    /*background-position: -40px -60px;*/
+    /*background-position: -40px -60px;s*/
 }
 
+div.head_line div.title_head{
+	 float: left;
+	position:relative;
+	font:100 25px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: bold;
+  
+}
 
-
-div.head_line{ 
-  height:30px;
+div.head_line{
+	margin: 0px auto;
+	clear: left;
+	width:auto;
+ 	 height:30px;
     -moz-transition-duration: 0.2s;
     -o-transition-duration:0.2s; 
     -webkit-transition-duration: .2s;
     opacity: 0.5;
 }
 
+
+
 div.head_line:hover{
+	position:relative;
     -moz-transition-duration: 0.2s;
     -o-transition-duration:0.2s; 
     -webkit-transition-duration: .2s;

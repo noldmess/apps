@@ -22,8 +22,10 @@ class moduletest_notcorrektclasserror implements OC_Module_Interface{
 	public function getID(){}
 	public function equivalent(){}
 	public function setForingKey($key){}
+	
 	/**
 	 * Create the DB of the Module the if the module hase an new Version numper
 	 */
 	public static function initialiseDB(){}
+	public static function AllTableExist(){}
 }

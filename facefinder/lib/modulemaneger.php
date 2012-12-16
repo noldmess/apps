@@ -1,5 +1,8 @@
 <?php
+
+//namespace OC\FaceFinder;
 /**
+ * The class OC_Module_Maneger instal and include the module automatically
  * ownCloud - faceFinder application
  *
 * @author Aaron Messner
@@ -34,39 +37,20 @@ class OC_Module_Maneger {
 		 * @todo make initialise
 		 */
 	function __construct() {
-		
-		/*$this->ModuleClass=$this->checkCorrectModuleClass("apps/facefinder/module/");
-		foreach ($this->ModuleClass as $modul){
-			$modul::initialiseDB();
-		}*/
-		$dir=$this->getCorrectFolderName().'apps/facefinder/module/';
-		if(is_dir($dir)){
-			$dh=opendir($dir);
-			while (($file = readdir($dh)) !== false) {
-				if( strpos($file,'.php')){
-					$classname=$this->checkCorrectModuleClass($dir . $file);
-					if($classname!=null){
-						
-						$this->ModuleClass[]=$classname;
-						$classname::initialiseDB();
-					}
-				}
-			}
-		}else{
-			/**
-			 * @todo use translation funktion
-		/	 */
-		OCP\Util::writeLog("facefinder","No Module folder found ",OCP\Util::ERROR);
+		$this->ModuleClass=self::getModulsOfFolder($_SERVER['DOCUMENT_ROOT']."/owncloud/apps/facefinder/module/");
+		if(empty($this->ModuleClass)){ 
+			OCP\Util::writeLog("facefinder","No Module folder found ",OCP\Util::ERROR);
 		}
 	}
+	
 	/**
 	 * The funktion trialled if the Class implements the 'OC_Module_Interface' interface
 	 * and the classname is identikal to the filaname
 	 * @param the Path to the class to check $classPath
 	 */
-	public  function checkCorrectModuleClass($classPath){
-		$classname=$this->getClassName($classPath);
-			include_once $classPath;
+	public static  function checkCorrectModuleClass($classPath){
+		$classname=self::getClassName($classPath);
+			require_once   $classPath;
 		if(!class_exists($classname)){
 			/**
 			 * @todo use translation funktion
@@ -74,8 +58,8 @@ class OC_Module_Maneger {
 			OCP\Util::writeLog("facefinder","Class not exist or not identik like file name:".$classname,OCP\Util::ERROR);
 			return  null;
 		}else{
-			$interfaceArray=class_implements($classname);
-			if(count($interfaceArray)>=1 && $interfaceArray['OC_Module_Interface']=='OC_Module_Interface'){
+			$interfaceArray=class_implements($classname);//&& self::CheckClass($classPath)
+			if(count($interfaceArray)>=1 && $interfaceArray['OC_Module_Interface']=='OC_Module_Interface' ) {
 					return $classname;
 			}else{
 				OCP\Util::writeLog("facefinder","The class:".$classname." not implements the OC_Module_Interface interface",OCP\Util::ERROR);
@@ -88,7 +72,7 @@ class OC_Module_Maneger {
 	/**
 	 *@todo fine correkt folder name 
 	 */
-	public  function getCorrectFolderName(){
+	public  static function getCorrectFolderName(){
 		$string=$_SERVER['SCRIPT_NAME'];
 		$help=strrpos($string,"/");
 		$string=substr($string, 0, $help);
@@ -103,32 +87,34 @@ class OC_Module_Maneger {
 		}
 		return $Path_tmp;
 	} 
+
+	
 	/**
+	 * 
 	 * The funktien need the path to the module folder
-	 * @param Path $modulpath
-	 * @return array of filenams or null in case the forder not exist <NULL, multitype:filename >
+	 * @param String $modulpath 
+	 * @return array  Classnames
+	 * @throws Exception is no Folser
 	 */
-	public function getModulsOfFolder($modulpath){
+	public static  function getModulsOfFolder($modulpath){
 		$modulaArray=array();
-		$dir=$this->getCorrectFolderName().$modulpath;
+		$dir=$modulpath;
 		if(is_dir($dir)){
 			$modulfolder=opendir($dir);
 			while (($file = readdir($modulfolder)) !== false) {
 				$fileinfo=pathinfo($file);
-				if( $fileinfo['extension']=='php'){
-					$classname=$this->getClassName($dir . $file);
-					//$classname=$this->checkCorrectModuleClass($dir . $file);
-					if($classname!=null){
-						$modulaArray[]=$classname;
+				if(!is_dir($modulpath.$file)){
+					if( $fileinfo['extension']=='php'){
+						$classname=self::checkCorrectModuleClass($dir . $file);
+						if($classname!=null){
+							$modulaArray[]=$classname;
+						}
 					}
-				}
+			}
 			}
 		}else{
-			/**
-			 * @todo use translation funktion
-			 */
-			OCP\Util::writeLog("facefinder","No Module folder found ",OCP\Util::ERROR);
-			$modulaArray=null;
+			OCP\Util::writeLog("facefinder","No Module folder found ".$modulpath,OCP\Util::ERROR);
+
 		}
 		return $modulaArray;
 	}
@@ -141,11 +127,53 @@ class OC_Module_Maneger {
 	/**
 	 * Funktioen get the path to a file and returns t
 	 * @param  $classPath
-	 * @return filename
+	 * @return String classname
 	 */
-	public  function getClassName($classPath){
+	public static  function getClassName($classPath){
 		$path_parts = pathinfo($classPath);
 		return  $path_parts['filename'];
 	}
+	
+	/**
+	 * Checks if the modulse not manipulate the photos and the position
+	 * @param unknown_type $moduleclass
+	 * @return boolean
+	 */
+	public static function CheckClass($moduleclass){
+		$path=$_SERVER['DOCUMENT_ROOT']."/owncloud/apps/facefinder/module/TestFolder/";
+		$image='Photo.jpg';
+		$imagecopy='testPhoto.jpg';
+		$boolen=true;
+		//$s=new ;
+		if(file_exists($path.$image)){
+			if(is_readable($path) &&is_writable($path)){
+				if(!copy($path.$image,$path.$imagecopy)){
+					OCP\Util::writeLog("facefinder","The file can not been copyet ".$modulpath,OCP\Util::ERROR);
+				}
+				$hash=hash_file('md5', $path.$imagecopy);
+				$tmp=new OC_FaceFinder_Photo($path.$imagecopy);
+				$tmp->insert();
+				$id=$tmp->getID();
+				$classname=self::getClassName($moduleclass);
+				$class=new $classname($path.$imagecopy);
+				$class->insert();
+				$class->update("test.jpg");
+				$class->remove();
+				if(!file_exists($path.$imagecopy)  || !($hash==hash_file('md5', $path.$imagecopy))){
+						$boolen=false;
+					}
+				$tmp->remove();
+				if(!file_exists($path.$imagecopy) || !($hash==hash_file('md5', $path.$imagecopy))){
+					$boolen=false;
+				}
+			}else{
+				OCP\Util::writeLog("facefinder","The Folder TestFolder has to be read and writerble ".$modulpath,OCP\Util::ERROR);
+			}
+		}
+		return $boolen;
+	}
+	
+	
+
 	
 }

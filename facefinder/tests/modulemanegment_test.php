@@ -1,23 +1,20 @@
 <?php
-//require_once(dirname(__FILE__) . '/../../../../simpletest/autorun.php');
-//require_once('apps/facefinder/lib/modulemaneger.php');
-//require_once('apps/facefinder/lib/moduleinterface.php');
-
+require_once(dirname(__FILE__) . '/../../../../simpletest/autorun.php');
+//require_once (dirname(__FILE__) .'/../../../lib/base.php');
+OC_App::loadApp('facefinder');
 class TestOfModuleManeger extends UnitTestCase {
 
     
     
     function testgetClassName(){
-    	$mm=new OC_Module_Maneger();
-    	$name=$mm->getClassName("/sdfsd/sdfsdf/dfsdf/sepp.php");
+    	$name=OC_Module_Maneger::getClassName("/sdfsd/sdfsdf/dfsdf/sepp.php");
     	$this->assertEqual($name, "sepp");
-    	$name=$mm->getClassName("/sdfsd/sdfsdf/dfsdf/seppdd.php");
+    	$name=OC_Module_Maneger::getClassName("/sdfsd/sdfsdf/dfsdf/seppdd.php");
     	$this->assertNotEqual($name, "sepp");
     }
     
-   function  testgetModulsOfFolder(){
-    	$mm=new OC_Module_Maneger();
-    	$arrddday=$mm->getModulsOfFolder(dirname(__FILE__) ."/testmodul/");
+ function  testgetModulsOfFolder(){
+    	$arrddday=OC_Module_Maneger::getModulsOfFolder($_SERVER['DOCUMENT_ROOT']."/owncloud/apps/facefinder/tests/testmodul/");
     	$this->assertNotNull($arrddday);
     	foreach ($arrddday as $modul){
     		$this->assertTrue(file_exists(dirname(__FILE__) ."/testmodul/".$modul.".php"));
@@ -26,16 +23,24 @@ class TestOfModuleManeger extends UnitTestCase {
     
 
     function  testcheckCorrectModuleClass(){
-    	$mm=new OC_Module_Maneger();
-    	$classname=$mm->checkCorrectModuleClass(dirname(__FILE__) ."/testmodul/moduletest_interface.php");
+    	$classname=OC_Module_Maneger::checkCorrectModuleClass($_SERVER['DOCUMENT_ROOT']."/owncloud/apps/facefinder/tests/testmodul/moduletest_interface.php");
     		$this->assertNotNull($classname);
     		$this->assertEqual($classname, "moduletest_interface");
-    	$classname=$mm->checkCorrectModuleClass(dirname(__FILE__) ."/testmodul/moduletest_nointerface.php");
+    	$classname=OC_Module_Maneger::checkCorrectModuleClass($_SERVER['DOCUMENT_ROOT']."/owncloud/apps/facefinder/tests/testmodul/moduletest_nointerface.php");
     		$this->assertNull($classname);
     		$this->assertNotEqual($classname, "moduletest_nointerface");
-    	$classname=$mm->checkCorrectModuleClass(dirname(__FILE__) ."/testmodul/moduletest_notcorrektclass.php");
+    	$classname=OC_Module_Maneger::checkCorrectModuleClass($_SERVER['DOCUMENT_ROOT']."/owncloud/apps/facefinder/tests/testmodul/moduletest_notcorrektclass.php");
     		$this->assertNull($classname);
     		$this->assertNotEqual($classname, "moduletest_notcorrektclass");
+    }
+    
+    function  testCheckClass(){
+    	$classname=OC_Module_Maneger::checkCorrectModuleClass($_SERVER['DOCUMENT_ROOT']."/owncloud/apps/facefinder/tests/testmodul/moduletest_interface.php");
+    	$test=OC_Module_Maneger::CheckClass($classname);
+    	$this->assertTrue($test);
+    	$classname=OC_Module_Maneger::checkCorrectModuleClass($_SERVER['DOCUMENT_ROOT']."/owncloud/apps/facefinder/tests/testmodul/moduletest_interfacenocange.php");
+    	$test=OC_Module_Maneger::CheckClass($classname);
+    	$this->assertTrue($test);
     }
     
      

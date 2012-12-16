@@ -5,11 +5,16 @@ class moduletest_interface implements OC_Module_Interface{
 	 * for the construction of the class you need the path
 	 * @param unknown_type $paht
 	 */
-	public  function __construct($path){}
+		private  $path;
+	public  function __construct($path){
+		$this->path=$path;
+	}
 	/**
 	 * Insert the data in the module DB 
 	 */
-	public function insert(){}
+	public function insert(){
+		// rename($this->path, $this->path."sdfsd");
+	}
 	/**
 	 * Remove the data in the module DB
 	 */
@@ -26,4 +31,5 @@ class moduletest_interface implements OC_Module_Interface{
 	 * Create the DB of the Module the if the module hase an new Version numper
 	 */
 	public static function initialiseDB(){}
+	public static function AllTableExist(){}
 }
